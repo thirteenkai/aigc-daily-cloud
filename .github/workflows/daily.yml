@@ -1,0 +1,59 @@
+name: AIGC daily
+on:
+  schedule:
+    - cron: '0 2 * * *'
+    - cron: '15,35,55 2-9 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Validate without sending, or run the scheduled delivery rules
+        type: choice
+        default: validate
+        options:
+          - validate
+          - scheduled
+permissions:
+  contents: write
+concurrency:
+  group: aigc-daily
+  cancel-in-progress: false
+jobs:
+  daily:
+    if: github.repository == vars.DEPLOYMENT_REPOSITORY && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.CLOUD_DAILY_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install pinned runtime
+        run: |
+          python3 -m pip install cryptography==46.0.3 --quiet
+          curl --fail --silent --show-error --location --max-time 60 https://github.com/larksuite/cli/releases/download/v1.0.93/lark-cli-1.0.93-linux-amd64.tar.gz -o /tmp/lark-cli.tar.gz
+          echo '10031849a1884bf9165cb01de47102b4847fba81bb9eb76f4168125ea9746c51  /tmp/lark-cli.tar.gz' | sha256sum --check
+          mkdir -p /tmp/lark-bin
+          tar -xzf /tmp/lark-cli.tar.gz -C /tmp/lark-bin
+          echo '/tmp/lark-bin' >> "$GITHUB_PATH"
+      - name: Regression checks
+        env:
+          DAILY_CHAT_ID: test-chat
+          EXPECTED_APP_ID: test-app
+        run: python3 -m unittest discover -s tests -q
+      - name: Generate, validate and deliver
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE_KEY: ${{ secrets.STATE_KEY }}
+          DAILY_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
+          EXPECTED_APP_ID: ${{ secrets.LARK_APP_ID }}
+          MODEL_BASE_URL: ${{ secrets.MODEL_BASE_URL }}
+          MODEL_NAME: ${{ secrets.MODEL_NAME }}
+          MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
+          DAILY_MODE: ${{ inputs.mode || 'scheduled' }}
+          LARKSUITE_CLI_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARKSUITE_CLI_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          LARKSUITE_CLI_BRAND: feishu
+          LARKSUITE_CLI_DEFAULT_AS: bot
+          LARKSUITE_CLI_STRICT_MODE: bot
+          LARKSUITE_CLI_NO_UPDATE_NOTIFIER: '1'
+          LARKSUITE_CLI_NO_SKILLS_NOTIFIER: '1'
+        run: python3 scripts/cloud_daily_bootstrap.py
