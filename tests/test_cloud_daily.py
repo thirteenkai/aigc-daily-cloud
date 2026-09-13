@@ -1,4 +1,7 @@
 import copy
+import base64
+import os
+from cryptography.fernet import Fernet
 from datetime import datetime
 import json
 from pathlib import Path
@@ -22,6 +25,23 @@ def state_fixture():
 
 
 class CloudDailyTests(unittest.TestCase):
+    def test_large_remote_state_uses_raw_content_fallback(self):
+        key=Fernet.generate_key();state=state_fixture()
+        encrypted=Fernet(key).encrypt(json.dumps(state).encode())
+        with patch.dict(os.environ,{'GITHUB_REPOSITORY':'owner/repo','STATE_KEY':key.decode()}):
+            remote=c.RemoteState()
+            with patch.object(remote,'request',side_effect=[{'sha':'revision','encoding':'none'},encrypted]) as request:
+                self.assertEqual(remote.load(),state)
+                request.assert_called_with(raw=True)
+
+    def test_corrupt_or_wrong_target_state_never_initializes_silently(self):
+        key=Fernet.generate_key();state=state_fixture();state['chatId']='another-chat'
+        encrypted=Fernet(key).encrypt(json.dumps(state).encode())
+        with patch.dict(os.environ,{'GITHUB_REPOSITORY':'owner/repo','STATE_KEY':key.decode()}):
+            remote=c.RemoteState()
+            with patch.object(remote,'request',return_value={'sha':'revision','encoding':'base64','content':base64.b64encode(encrypted).decode()}):
+                with self.assertRaises(ValueError):remote.load()
+
     def test_send_is_checkpointed_before_network_and_receipt_before_readback(self):
         state=state_fixture();events=[]
         def save(s): events.append(s['days']['2026-09-14']['phase'])
@@ -61,6 +81,20 @@ class CloudDailyTests(unittest.TestCase):
         with patch.object(c,'create_publication') as model:
             self.assertEqual(c.run(state,lambda s:None,'scheduled',datetime(2026,9,14,10,tzinfo=ZoneInfo('Asia/Shanghai'))),'already_complete')
             model.assert_not_called()
+
+    def test_older_uncertain_delivery_blocks_new_day(self):
+        state=state_fixture();state['days']['2026-09-13']={'phase':'attempting'}
+        with patch.object(c,'create_publication') as model:
+            with self.assertRaises(RuntimeError):c.run(state,lambda s:None,'scheduled',datetime(2026,9,14,10))
+            model.assert_not_called()
+
+    def test_older_unsent_draft_expires_without_sending(self):
+        state=state_fixture();state['days']['2026-09-13']={'phase':'prepared'}
+        state['days']['2026-09-14']['phase']='verified'
+        with patch.object(c,'publish') as send:
+            c.run(state,lambda s:None,'scheduled',datetime(2026,9,14,10))
+            send.assert_not_called()
+        self.assertEqual(state['days']['2026-09-13']['phase'],'expired')
 
     def test_no_early_send_or_model_call(self):
         with patch.object(c,'create_publication') as model:

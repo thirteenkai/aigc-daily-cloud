@@ -20,19 +20,19 @@
     "exportSha256": "b98d4a0aaaba0009a3077e680dcc8de987481a47e7f71d87e5a5c17a27fdca58"
   },
   "references/daily-editorial.md": {
-    "sourceSha256": "6221f176e4303b91c1c51802d1159b68c59ab18520f5c49ffc1fce1fcfe3ee16",
+    "sourceSha256": "ec05ed2db9156666d8a4cb467ac92789361152d454cc8acb166758c323c83d3f",
     "exportSha256": "74312ab33af0240dcddba4e383c123d50dd3fefb129bc4fbf0e44c844cb0e54a"
   },
   "tests/test_cloud_daily.py": {
-    "sourceSha256": "f7c580d7eba9b11555900075cb32ee41b5d1b65b02d32941c9c37dc08cb495ae",
-    "exportSha256": "f7c580d7eba9b11555900075cb32ee41b5d1b65b02d32941c9c37dc08cb495ae"
+    "sourceSha256": "6da9492fda1f6d9f0cead1ea0dabe8ea4bd774cd8730ed0ba8b31b47c8551f28",
+    "exportSha256": "6da9492fda1f6d9f0cead1ea0dabe8ea4bd774cd8730ed0ba8b31b47c8551f28"
   },
   "tests/test_daily_editorial.py": {
     "sourceSha256": "e141b5ed08cfe7933d9c4c03793243fd0e1ca552e3574d116b8583201ca98e8c",
     "exportSha256": "e141b5ed08cfe7933d9c4c03793243fd0e1ca552e3574d116b8583201ca98e8c"
   },
   "VERSION": {
-    "sourceSha256": "1523e9e982ff804c6d979e1bb2c6f3d7bae35307e8ce458bffc0d12a442b98da",
-    "exportSha256": "1523e9e982ff804c6d979e1bb2c6f3d7bae35307e8ce458bffc0d12a442b98da"
+    "sourceSha256": "44804414f85bef9588f60086587fd6e8871b39123c831ec129624f4d81a95fea",
+    "exportSha256": "44804414f85bef9588f60086587fd6e8871b39123c831ec129624f4d81a95fea"
   }
 }
