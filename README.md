@@ -13,6 +13,7 @@ Configuration:
 Candidate collection combines the official daily, rolling selected items, and seven explicit creative-topic searches of AIHOT's public pool (video, image, audio, music, speech, digital humans and short drama). Non-selected results retain their status and provenance; search matches are candidates, not recommendations. All query pages must complete, with a five-page-per-query and 70-unique-candidate guard that fails rather than silently truncates. This scope is for internal creative reporting, not a public API mirror.
 
 - Secrets: `STATE_KEY`, `LARK_APP_ID`, `LARK_APP_SECRET`, `LARK_CHAT_ID`, `MODEL_BASE_URL`, `MODEL_NAME`, `MODEL_API_KEY`.
+- Optional `APPROVED_RECEIPT_IMPORT` contains an explicitly approved external supplement's receipt, card and news entries. Dispatch `import-receipt` to verify the actual message and append its news to encrypted history. This mode sends nothing, makes no model calls and preserves the daily publication state. Existing imports are immutable and idempotent.
 - Variables: `DEPLOYMENT_REPOSITORY` must equal this repository; `CLOUD_DAILY_ENABLED=true` enables scheduled runs after migration validation. Forks and non-main dispatches cannot run the delivery job.
 - `state.enc` must be explicitly initialized from verified prior receipts before activation.
 - Standard GitHub-hosted public-repository runners are used. No plaintext news artifacts, private message identifiers, provider responses or credentials are printed in public logs.
