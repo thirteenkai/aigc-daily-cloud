@@ -1,8 +1,7 @@
 name: AIGC daily
 on:
   schedule:
-    - cron: '0 2 * * *'
-    - cron: '15,35,55 2-9 * * *'
+    - cron: '7,27,47 2-9 * * *'
   workflow_dispatch:
     inputs:
       mode:

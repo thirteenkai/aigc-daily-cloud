@@ -17,6 +17,7 @@ from cryptography.fernet import Fernet
 import aihot_pipeline as p
 from daily_editorial import fingerprint
 from daily_workflow import render
+from daily_sources import supplement_creation
 
 
 def now():
@@ -69,7 +70,7 @@ def history_for(state, date):
 def fetch_source():
     with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):
         p.command_fetch_daily(argparse.Namespace(out_dir=tmp))
-        return p.read_json(Path(tmp) / 'candidates.json')
+        return supplement_creation(p.read_json(Path(tmp) / 'candidates.json'))
 
 
 def model_decision(source, history, date, feedback=None):

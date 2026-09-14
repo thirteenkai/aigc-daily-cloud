@@ -12,16 +12,20 @@
     "exportSha256": "db64951ec3f7bcac5a0ac7372142f00a39733993d768cb4a8d03ce4962980ab5"
   },
   "scripts/cloud_daily.py": {
-    "sourceSha256": "2378a2191f34aff1b0abbfdaed87396e902bc46ebc2958002c953c3aa87266f3",
-    "exportSha256": "2378a2191f34aff1b0abbfdaed87396e902bc46ebc2958002c953c3aa87266f3"
+    "sourceSha256": "bf221fa4292cce0d9883c7ccb50e1bdad6761b18c1361e3f417489643e43ae01",
+    "exportSha256": "bf221fa4292cce0d9883c7ccb50e1bdad6761b18c1361e3f417489643e43ae01"
   },
   "scripts/cloud_daily_bootstrap.py": {
     "sourceSha256": "b98d4a0aaaba0009a3077e680dcc8de987481a47e7f71d87e5a5c17a27fdca58",
     "exportSha256": "b98d4a0aaaba0009a3077e680dcc8de987481a47e7f71d87e5a5c17a27fdca58"
   },
+  "scripts/daily_sources.py": {
+    "sourceSha256": "b295af30ca3ded85f6c658f20a0f6e7fdd5d34715d6eac27b562a198a8c84f52",
+    "exportSha256": "b295af30ca3ded85f6c658f20a0f6e7fdd5d34715d6eac27b562a198a8c84f52"
+  },
   "references/daily-editorial.md": {
-    "sourceSha256": "ec05ed2db9156666d8a4cb467ac92789361152d454cc8acb166758c323c83d3f",
-    "exportSha256": "74312ab33af0240dcddba4e383c123d50dd3fefb129bc4fbf0e44c844cb0e54a"
+    "sourceSha256": "1951fb6afa292ba101b08b92e2666383833712f4634b9df862fe23192f51f463",
+    "exportSha256": "1f420b6a5338b56a5a81a8e860482fe70627df9c4890533d13c172e8ca8311d2"
   },
   "tests/test_cloud_daily.py": {
     "sourceSha256": "6da9492fda1f6d9f0cead1ea0dabe8ea4bd774cd8730ed0ba8b31b47c8551f28",
@@ -31,8 +35,12 @@
     "sourceSha256": "e141b5ed08cfe7933d9c4c03793243fd0e1ca552e3574d116b8583201ca98e8c",
     "exportSha256": "e141b5ed08cfe7933d9c4c03793243fd0e1ca552e3574d116b8583201ca98e8c"
   },
+  "tests/test_daily_sources.py": {
+    "sourceSha256": "8d0bd0e56f8fdfd5242bdf36a6c7f94a1e236a1d79d2bab34d6b0f5231cccfb3",
+    "exportSha256": "8d0bd0e56f8fdfd5242bdf36a6c7f94a1e236a1d79d2bab34d6b0f5231cccfb3"
+  },
   "VERSION": {
-    "sourceSha256": "44804414f85bef9588f60086587fd6e8871b39123c831ec129624f4d81a95fea",
-    "exportSha256": "44804414f85bef9588f60086587fd6e8871b39123c831ec129624f4d81a95fea"
+    "sourceSha256": "b6403da9b22abe355ad17208a336e658322c5d1d7ff646ca7b9229237ba4aef4",
+    "exportSha256": "b6403da9b22abe355ad17208a336e658322c5d1d7ff646ca7b9229237ba4aef4"
   }
 }
