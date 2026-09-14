@@ -11,6 +11,7 @@ on:
         options:
           - validate
           - scheduled
+          - import-receipt
 permissions:
   contents: write
 concurrency:
@@ -48,6 +49,7 @@ jobs:
           MODEL_NAME: ${{ secrets.MODEL_NAME }}
           MODEL_API_KEY: ${{ secrets.MODEL_API_KEY }}
           DAILY_MODE: ${{ inputs.mode || 'scheduled' }}
+          APPROVED_RECEIPT_IMPORT: ${{ secrets.APPROVED_RECEIPT_IMPORT }}
           LARKSUITE_CLI_APP_ID: ${{ secrets.LARK_APP_ID }}
           LARKSUITE_CLI_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
           LARKSUITE_CLI_BRAND: feishu

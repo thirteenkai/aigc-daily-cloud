@@ -137,3 +137,26 @@ class CloudDailyTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+class ReceiptImportTests(unittest.TestCase):
+    def fixture(self):
+        state=state_fixture();item=state['days']['2026-09-14'];selected=item['decision']['items'][0];original=item['source']['items'][0]
+        entry={'ref':'2026-09-14/'+original['key'],'date':'2026-09-14','title':original['title'],'summary':original['summary'],'links':original['links'],'change':selected['change'],'insight':selected['insight']}
+        return state,{'date':'2026-09-14','messageId':'om_approved','card':item['card'],'entries':[entry]}
+
+    def test_verified_import_updates_history_once_without_sending(self):
+        state,receipt=self.fixture()
+        with patch.object(c,'identity'),patch.object(c,'readback') as read,patch.object(c,'lark') as send:
+            self.assertEqual(c.import_approved_receipt(state,lambda s:None,receipt),'approved_receipt_imported_without_sending')
+            self.assertEqual(c.import_approved_receipt(state,lambda s:None,receipt),'receipt_already_imported')
+            read.assert_called_once();send.assert_not_called()
+        self.assertEqual(len(state['history']),1)
+        self.assertEqual(state['days']['2026-09-14']['phase'],'prepared')
+
+    def test_unverified_or_mismatched_content_cannot_enter_history(self):
+        state,receipt=self.fixture()
+        with patch.object(c,'identity'),patch.object(c,'readback',side_effect=RuntimeError()):
+            with self.assertRaises(RuntimeError):c.import_approved_receipt(state,lambda s:None,receipt)
+        self.assertEqual(state['history'],[])
+        receipt['entries'][0]['title']='not in card'
+        with self.assertRaises(ValueError):c.import_approved_receipt(state,lambda s:None,receipt)

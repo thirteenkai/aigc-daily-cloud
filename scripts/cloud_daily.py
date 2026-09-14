@@ -210,7 +210,46 @@ def publish(state, save, date):
     return 'verified'
 
 
+def import_approved_receipt(state, save, receipt):
+    """Read back an explicitly approved external send and add its news to history."""
+    day = receipt['date']
+    datetime.strptime(day, '%Y-%m-%d')
+    card = receipt['card']
+    send_args(day, card)  # Validate date and card without sending.
+    key = receipt['messageId']
+    signature = fingerprint(receipt)
+    existing = state.get('manualImports', {}).get(key)
+    if existing:
+        if existing['fingerprint'] != signature:
+            raise ValueError('Imported receipt changed')
+        return 'receipt_already_imported'
+    entries = receipt['entries']
+    if not isinstance(entries, list) or not 1 <= len(entries) <= 7:
+        raise ValueError('Invalid imported history')
+    body = json.dumps(card, ensure_ascii=False)
+    for entry in entries:
+        if entry['date'] != day or not entry['ref'].startswith(day + '/'):
+            raise ValueError('Imported history date mismatch')
+        if not all(entry.get(field) and entry[field] in body for field in ('title', 'change', 'insight')):
+            raise ValueError('Imported history differs from sent card')
+        if not any(link and link in body for link in entry['links'].values()):
+            raise ValueError('Imported source link missing from card')
+    identity()
+    readback(key, card)
+    refs = {h['ref']: h for h in state['history']}
+    for entry in entries:
+        if entry['ref'] not in refs:
+            state['history'].append(entry)
+            refs[entry['ref']] = entry
+    state.setdefault('manualImports', {})[key] = {'fingerprint': signature,
+        'date': day, 'verifiedAt': now(), 'card': card, 'entries': entries}
+    save(state)
+    return 'approved_receipt_imported_without_sending'
+
+
 def run(state, save, mode, clock=None):
+    if mode == 'import-receipt':
+        return import_approved_receipt(state, save, json.loads(os.environ['APPROVED_RECEIPT_IMPORT']))
     clock = clock or datetime.now(ZoneInfo('Asia/Shanghai'))
     date = clock.strftime('%Y-%m-%d')
     if mode == 'validate':
@@ -246,7 +285,7 @@ def main():
     remote = RemoteState()
     state = remote.load()
     mode = os.environ.get('DAILY_MODE', 'validate')
-    if mode not in ('validate', 'scheduled'):
+    if mode not in ('validate', 'scheduled', 'import-receipt'):
         raise ValueError('Unknown mode')
     try:
         status = run(state, remote.save, mode)

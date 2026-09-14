@@ -12,8 +12,8 @@
     "exportSha256": "db64951ec3f7bcac5a0ac7372142f00a39733993d768cb4a8d03ce4962980ab5"
   },
   "scripts/cloud_daily.py": {
-    "sourceSha256": "bf221fa4292cce0d9883c7ccb50e1bdad6761b18c1361e3f417489643e43ae01",
-    "exportSha256": "bf221fa4292cce0d9883c7ccb50e1bdad6761b18c1361e3f417489643e43ae01"
+    "sourceSha256": "b579914665a1f6f22fbbad180f907667e65e0ac05986f914dd7c9f24c8a8525d",
+    "exportSha256": "b579914665a1f6f22fbbad180f907667e65e0ac05986f914dd7c9f24c8a8525d"
   },
   "scripts/cloud_daily_bootstrap.py": {
     "sourceSha256": "b98d4a0aaaba0009a3077e680dcc8de987481a47e7f71d87e5a5c17a27fdca58",
@@ -28,8 +28,8 @@
     "exportSha256": "1f420b6a5338b56a5a81a8e860482fe70627df9c4890533d13c172e8ca8311d2"
   },
   "tests/test_cloud_daily.py": {
-    "sourceSha256": "6da9492fda1f6d9f0cead1ea0dabe8ea4bd774cd8730ed0ba8b31b47c8551f28",
-    "exportSha256": "6da9492fda1f6d9f0cead1ea0dabe8ea4bd774cd8730ed0ba8b31b47c8551f28"
+    "sourceSha256": "e7b924c70132a94d569d5ef620de0f4f93a77a9ba56cd7a2ba2ed7fef26b06aa",
+    "exportSha256": "e7b924c70132a94d569d5ef620de0f4f93a77a9ba56cd7a2ba2ed7fef26b06aa"
   },
   "tests/test_daily_editorial.py": {
     "sourceSha256": "e141b5ed08cfe7933d9c4c03793243fd0e1ca552e3574d116b8583201ca98e8c",
@@ -40,7 +40,7 @@
     "exportSha256": "8d0bd0e56f8fdfd5242bdf36a6c7f94a1e236a1d79d2bab34d6b0f5231cccfb3"
   },
   "VERSION": {
-    "sourceSha256": "b6403da9b22abe355ad17208a336e658322c5d1d7ff646ca7b9229237ba4aef4",
-    "exportSha256": "b6403da9b22abe355ad17208a336e658322c5d1d7ff646ca7b9229237ba4aef4"
+    "sourceSha256": "9d2bf356d838faba1759efd3e9de32647bd68e9da8c92878074b392872e9f04e",
+    "exportSha256": "9d2bf356d838faba1759efd3e9de32647bd68e9da8c92878074b392872e9f04e"
   }
 }
